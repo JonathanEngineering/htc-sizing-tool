@@ -50,6 +50,13 @@ button {
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  background-color: #2e7d32;   /* green */
+  color: white;
+  transition: 0.2s;
+}
+
+button:hover {
+  background-color: #1b5e20;   /* darker green */
 }
 
 .scenario {
