@@ -3,56 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HTC Feedstock Comparison Tool</title>
+  <title>HTC Feedstock Tool</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>HTC Feedstock Comparison Tool</h1>
-      <p>
-        Compare biomass feedstocks for hydrothermal carbonization (HTC)
-        based on energy output and carbon retention.
-      </p>
-    </header>
 
-    <section class="card">
-      <h2>Inputs</h2>
+<div class="container">
 
-      <label>Moisture Content (%) (Typical: 60–80%)</label>
-      <input type="number" id="moistureContent" value="70" />
+  <h1>HTC Feedstock Comparison Tool</h1>
 
-      <label>HTC Temperature (°C) (Typical: 180–250°C)</label>
-      <input type="number" id="temperature" value="220" />
+  <div class="card">
+    <h2>Inputs</h2>
 
-      <label>Residence Time (min) (Typical: 30–120 min)</label>
-      <input type="number" id="residenceTime" value="60" />
+    <label>Moisture Content (%) (Typical: 60–80%)</label>
+    <input type="number" id="moistureContent" value="70">
 
-      <label>Optimization Goal</label>
-      <select id="optimizationGoal">
-        <option value="energy">Max Energy</option>
-        <option value="balanced">Balanced</option>
-        <option value="carbon">Max Carbon Retention</option>
-      </select>
+    <label>HTC Temperature (°C) (Typical: 180–250)</label>
+    <input type="number" id="temperature" value="220">
 
-      <button id="runBtn">Compare Feedstocks</button>
-    </section>
+    <label>Residence Time (min) (Typical: 30–120)</label>
+    <input type="number" id="residenceTime" value="60">
 
-    <section class="card">
-      <h2>Results</h2>
-      <div id="results"></div>
+    <label>Optimization Goal</label>
+    <select id="optimizationGoal">
+      <option value="energy">Max Energy</option>
+      <option value="balanced">Balanced</option>
+      <option value="carbon">Max Carbon</option>
+    </select>
 
-      <h3>Feedstock Comparison</h3>
-      <canvas id="comparisonChart"></canvas>
-
-      <button onclick="downloadChart()">Download Graph (PNG)</button>
-      <button onclick="downloadCSV()">Download Data (CSV)</button>
-      <button onclick="downloadPDF()">Download Report (PDF)</button>
-    </section>
+    <button onclick="compare()">Run Analysis</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf"></script>
-  <script src="app.js"></script>
+  <div class="card">
+    <h2>Results</h2>
+    <div id="results"></div>
+
+    <h3>Comparison Graph</h3>
+    <canvas id="chartCanvas"></canvas>
+
+    <button onclick="downloadPNG()">Download Graph</button>
+    <button onclick="downloadCSV()">Download CSV</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+  </div>
+
+</div>
+
+<!-- LIBRARIES (IMPORTANT ORDER) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<script src="app.js"></script>
+
 </body>
 </html>
