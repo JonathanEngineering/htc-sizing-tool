@@ -28,13 +28,16 @@
         <option value="high">High</option>
       </select>
 
+      <label for="moistureContent">Moisture Content (%)</label>
+      <input type="number" id="moistureContent" min="0" max="60" step="1" value="20" />
+
       <button id="runBtn">Generate Recommendations</button>
     </section>
 
     <section class="card">
       <h2>Results</h2>
       <div id="results">
-        <p>Enter a desired power output and click the button to generate scenarios.</p>
+        <p>Enter inputs and generate scenarios.</p>
       </div>
     </section>
   </div>
