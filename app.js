@@ -1,3 +1,5 @@
+let lastResults = [];
+let chart;
 const feedstocks = [
   {
     name: "Wood",
@@ -201,7 +203,8 @@ function compareFeedstocks() {
 
   const scoredResults = applyScoring(rawResults, optimizationGoal);
 
-  scoredResults.sort((a, b) => b.overallScore_percent - a.overallScore_percent);
+  lastResults = scoredResults;
+  createComparisonChart(scoredResults);
 
   const bestResult = scoredResults[0];
   const explanation = getRecommendationExplanation(bestResult, optimizationGoal);
@@ -225,3 +228,44 @@ function compareFeedstocks() {
 }
 
 document.getElementById("runBtn").addEventListener("click", compareFeedstocks);
+
+function createComparisonChart(results) {
+  const ctx = document.getElementById("comparisonChart").getContext("2d");
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: results.map(r => r.feedstock),
+      datasets: [
+        {
+          label: "Energy Yield (%)",
+          data: results.map(r => r.energyYield_percent)
+        },
+        {
+          label: "Carbon Retention (%)",
+          data: results.map(r => r.carbonRetention_percent)
+        },
+        {
+          label: "Hydrochar Yield (%)",
+          data: results.map(r => r.hydrocharYield_percent)
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+function downloadChart() {
+  const link = document.createElement("a");
+  link.download = "htc_chart.png";
+  link.href = document.getElementById("comparisonChart").toDataURL();
+  link.click();
+}
