@@ -41,11 +41,18 @@
     <section class="card">
       <h2>Results</h2>
       <div id="results">
+        <h3>Feedstock Comparison</h3>
+        <canvas id="comparisonChart"></canvas>
+        <button onclick="downloadChart()">Download Graph (PNG)</button>
+        <button onclick="downloadCSV()">Download Data (CSV)</button>
+        <button onclick="downloadPDF()">Download Report (PDF)</button>
         <p>Enter the HTC conditions and click “Compare Feedstocks.”</p>
       </div>
     </section>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf"></script>
   <script src="app.js"></script>
 </body>
 </html>
