@@ -1,58 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HTC Feedstock Tool</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+// SIMPLE TEST VERSION
 
-<div class="container">
+const feedstocks = [
+  { name: "Wood" },
+  { name: "Corn Stover" },
+  { name: "Algae" },
+  { name: "Food Waste" }
+];
 
-  <h1>HTC Feedstock Comparison Tool</h1>
+function compare() {
 
-  <div class="card">
-    <h2>Inputs</h2>
+  // Test alert to confirm button works
+  alert("Run button is working!");
 
-    <label>Moisture Content (%) (Typical: 60–80%)</label>
-    <input type="number" id="moistureContent" value="70">
+  const M = document.getElementById("moistureContent").value;
+  const T = document.getElementById("temperature").value;
+  const t = document.getElementById("residenceTime").value;
+  const goal = document.getElementById("optimizationGoal").value;
 
-    <label>HTC Temperature (°C) (Typical: 180–250)</label>
-    <input type="number" id="temperature" value="220">
+  let html = "<h3>Inputs Received:</h3>";
 
-    <label>Residence Time (min) (Typical: 30–120)</label>
-    <input type="number" id="residenceTime" value="60">
+  html += `Moisture: ${M}%<br>`;
+  html += `Temperature: ${T}°C<br>`;
+  html += `Time: ${t} min<br>`;
+  html += `Goal: ${goal}<br><br>`;
 
-    <label>Optimization Goal</label>
-    <select id="optimizationGoal">
-      <option value="energy">Max Energy</option>
-      <option value="balanced">Balanced</option>
-      <option value="carbon">Max Carbon</option>
-    </select>
+  html += "<h3>Feedstocks:</h3>";
 
-    <button onclick="compare()">Run Analysis</button>
-  </div>
+  feedstocks.forEach(f => {
+    html += `${f.name}<br>`;
+  });
 
-  <div class="card">
-    <h2>Results</h2>
-    <div id="results"></div>
+  document.getElementById("results").innerHTML = html;
+}
 
-    <h3>Comparison Graph</h3>
-    <canvas id="chartCanvas"></canvas>
-
-    <button onclick="downloadPNG()">Download Graph</button>
-    <button onclick="downloadCSV()">Download CSV</button>
-    <button onclick="downloadPDF()">Download PDF</button>
-  </div>
-
-</div>
-
-<!-- LIBRARIES (IMPORTANT ORDER) -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-
-<script src="app.js"></script>
-
-</body>
-</html>
+// SAFE BUTTON CONNECTION
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("runBtn").addEventListener("click", compare);
+});
