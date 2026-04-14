@@ -1,8 +1,3 @@
-// ---------------------------------------------
-// HTC Biomass Sizing Tool - Version 1
-// Screening-level engineering estimator
-// ---------------------------------------------
-
 const feedstocks = [
   {
     name: "Wood Chips",
@@ -59,6 +54,26 @@ function formatNumber(value, decimals = 2) {
 }
 
 function calculateScenario(powerMW, feedstock, optimization) {
+
+  // 🔥 Moisture + Latent Heat Integration
+  const moistureInput = document.getElementById("moistureContent").value;
+  const MC = parseFloat(moistureInput) / 100;
+
+  const HV_dry = feedstock.heatingValue_GJ_per_t;
+
+  // Latent heat of vaporization (GJ/t)
+  const h_vap = 2.26;
+
+  const effectiveHV = (HV_dry * (1 - MC)) - (MC * h_vap);
+
+  // ❗ Safety check
+  if (effectiveHV <= 0) {
+    return {
+      feedstock: feedstock.name,
+      error: "Moisture too high — no usable energy from biomass."
+    };
+  }
+
   const annualElectricity_MWh = powerMW * 8760;
 
   const adjustedEfficiency =
@@ -74,7 +89,7 @@ function calculateScenario(powerMW, feedstock, optimization) {
     (annualElectricity_MWh * 3.6) / adjustedEfficiency;
 
   const annualBiomassRequired_t =
-    annualBiomassEnergy_GJ / feedstock.heatingValue_GJ_per_t;
+    annualBiomassEnergy_GJ / effectiveHV;
 
   const dailyBiomassRequired_t =
     annualBiomassRequired_t / 365;
@@ -89,7 +104,6 @@ function calculateScenario(powerMW, feedstock, optimization) {
     feedstock: feedstock.name,
     optimizationLevel: optimization.label,
     efficiency_percent: adjustedEfficiency * 100,
-    annualElectricity_MWh,
     annualBiomassRequired_t,
     dailyBiomassRequired_t,
     biomassLandRequired_ha,
@@ -99,16 +113,26 @@ function calculateScenario(powerMW, feedstock, optimization) {
 }
 
 function buildScenarioHTML(result, rank) {
+
+  if (result.error) {
+    return `
+      <div class="scenario">
+        <h3>${result.feedstock}</h3>
+        <p style="color:red;">${result.error}</p>
+      </div>
+    `;
+  }
+
   return `
     <div class="scenario">
       <h3>Option ${rank}: ${result.feedstock}</h3>
       <div class="grid">
         <div><strong>Optimization Level:</strong><br>${result.optimizationLevel}</div>
-        <div><strong>Estimated Efficiency:</strong><br>${formatNumber(result.efficiency_percent)}%</div>
-        <div><strong>Biomass Required:</strong><br>${formatNumber(result.dailyBiomassRequired_t)} t/day</div>
-        <div><strong>Biomass Required:</strong><br>${formatNumber(result.annualBiomassRequired_t)} t/year</div>
-        <div><strong>Land for Biomass:</strong><br>${formatNumber(result.biomassLandRequired_ha)} ha</div>
-        <div><strong>Land for HTC Plant:</strong><br>${formatNumber(result.plantLandRequired_ha)} ha</div>
+        <div><strong>Efficiency:</strong><br>${formatNumber(result.efficiency_percent)}%</div>
+        <div><strong>Biomass:</strong><br>${formatNumber(result.dailyBiomassRequired_t)} t/day</div>
+        <div><strong>Annual Biomass:</strong><br>${formatNumber(result.annualBiomassRequired_t)} t/year</div>
+        <div><strong>Land (Biomass):</strong><br>${formatNumber(result.biomassLandRequired_ha)} ha</div>
+        <div><strong>Land (Plant):</strong><br>${formatNumber(result.plantLandRequired_ha)} ha</div>
       </div>
       <div class="note">${result.note}</div>
     </div>
@@ -123,7 +147,7 @@ function generateRecommendations() {
   const powerMW = parseFloat(powerInput);
 
   if (isNaN(powerMW) || powerMW <= 0) {
-    resultsDiv.innerHTML = `<p>Please enter a valid power output greater than 0 MW.</p>`;
+    resultsDiv.innerHTML = `<p>Please enter a valid power output.</p>`;
     return;
   }
 
@@ -133,13 +157,11 @@ function generateRecommendations() {
     calculateScenario(powerMW, feedstock, optimization)
   );
 
-  // Sort from least biomass land required to most
-  results.sort((a, b) => a.biomassLandRequired_ha - b.biomassLandRequired_ha);
+  results.sort((a, b) => (a.biomassLandRequired_ha || 0) - (b.biomassLandRequired_ha || 0));
 
   let html = `
     <p>
-      For a desired output of <strong>${formatNumber(powerMW, 1)} MW</strong>,
-      the tool recommends the following screening-level options:
+      For <strong>${formatNumber(powerMW, 1)} MW</strong>, here are recommended options:
     </p>
   `;
 
