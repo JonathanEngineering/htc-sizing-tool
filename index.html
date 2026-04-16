@@ -1,39 +1,42 @@
-// SIMPLE TEST VERSION
-
 const feedstocks = [
-  { name: "Wood" },
-  { name: "Corn Stover" },
-  { name: "Algae" },
-  { name: "Food Waste" }
+    { name: "Wood" },
+    { name: "Corn Stover" },
+    { name: "Algae" },
+    { name: "Food Waste" }
 ];
 
 function compare() {
+    // Get inputs
+    const M = document.getElementById("moistureContent").value;
+    const T = document.getElementById("temperature").value;
+    const t = document.getElementById("residenceTime").value;
+    const goal = document.getElementById("optimizationGoal").value;
 
-  // Test alert to confirm button works
-  alert("Run button is working!");
+    // Simple placeholder calculation (we’ll replace later)
+    const result = (T * t) / (M || 1);
 
-  const M = document.getElementById("moistureContent").value;
-  const T = document.getElementById("temperature").value;
-  const t = document.getElementById("residenceTime").value;
-  const goal = document.getElementById("optimizationGoal").value;
+    // Build output
+    let html = `
+        <h3>Inputs Received:</h3>
+        <p><b>Moisture:</b> ${M}%</p>
+        <p><b>Temperature:</b> ${T} °C</p>
+        <p><b>Time:</b> ${t} min</p>
+        <p><b>Goal:</b> ${goal}</p>
 
-  let html = "<h3>Inputs Received:</h3>";
+        <h3>Feedstocks:</h3>
+        <ul>
+    `;
 
-  html += `Moisture: ${M}%<br>`;
-  html += `Temperature: ${T}°C<br>`;
-  html += `Time: ${t} min<br>`;
-  html += `Goal: ${goal}<br><br>`;
+    feedstocks.forEach(f => {
+        html += `<li>${f.name}</li>`;
+    });
 
-  html += "<h3>Feedstocks:</h3>";
+    html += `</ul>`;
 
-  feedstocks.forEach(f => {
-    html += `${f.name}<br>`;
-  });
+    html += `
+        <h3>Result:</h3>
+        <p>Estimated Output Value: <b>${result.toFixed(2)}</b></p>
+    `;
 
-  document.getElementById("results").innerHTML = html;
+    document.getElementById("results").innerHTML = html;
 }
-
-// SAFE BUTTON CONNECTION
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("runBtn").addEventListener("click", compare);
-});
