@@ -1,42 +1,55 @@
-const feedstocks = [
-    { name: "Wood" },
-    { name: "Corn Stover" },
-    { name: "Algae" },
-    { name: "Food Waste" }
-];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTC System Tool</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-function compare() {
-    // Get inputs
-    const M = document.getElementById("moistureContent").value;
-    const T = document.getElementById("temperature").value;
-    const t = document.getElementById("residenceTime").value;
-    const goal = document.getElementById("optimizationGoal").value;
+  <div class="container">
+    <header>
+      <h1>Hydrothermal Carbonization (HTC) Tool</h1>
+      <p>Estimate outputs based on process conditions</p>
+    </header>
 
-    // Simple placeholder calculation (we’ll replace later)
-    const result = (T * t) / (M || 1);
+    <div class="card">
+      <h2>Inputs</h2>
 
-    // Build output
-    let html = `
-        <h3>Inputs Received:</h3>
-        <p><b>Moisture:</b> ${M}%</p>
-        <p><b>Temperature:</b> ${T} °C</p>
-        <p><b>Time:</b> ${t} min</p>
-        <p><b>Goal:</b> ${goal}</p>
+      <label for="feedstock">Feedstock Type</label>
+      <select id="feedstock">
+        <option value="wood">Wood</option>
+        <option value="corn">Corn Stover</option>
+        <option value="algae">Algae</option>
+        <option value="food">Food Waste</option>
+      </select>
 
-        <h3>Feedstocks:</h3>
-        <ul>
-    `;
+      <label for="moistureContent">Moisture Content (%)</label>
+      <input type="number" id="moistureContent" placeholder="e.g. 70">
 
-    feedstocks.forEach(f => {
-        html += `<li>${f.name}</li>`;
-    });
+      <label for="temperature">Temperature (°C)</label>
+      <input type="number" id="temperature" placeholder="e.g. 220">
 
-    html += `</ul>`;
+      <label for="residenceTime">Residence Time (min)</label>
+      <input type="number" id="residenceTime" placeholder="e.g. 60">
 
-    html += `
-        <h3>Result:</h3>
-        <p>Estimated Output Value: <b>${result.toFixed(2)}</b></p>
-    `;
+      <label for="optimizationGoal">Optimization Goal</label>
+      <select id="optimizationGoal">
+        <option value="energy">Max Energy Output</option>
+        <option value="yield">Max Hydrochar Yield</option>
+        <option value="carbon">Max Carbon Content</option>
+      </select>
 
-    document.getElementById("results").innerHTML = html;
-}
+      <button onclick="runHTC()">Run Simulation</button>
+    </div>
+
+    <div class="card">
+      <h2>Results</h2>
+      <div id="results">No results yet...</div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
