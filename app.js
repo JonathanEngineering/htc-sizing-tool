@@ -1,3 +1,7 @@
+console.log("JS is connected");
+
+document.getElementById("runBtn").addEventListener("click", runHTC);
+
 function runHTC() {
   // Get inputs
   const feedstock = document.getElementById("feedstock").value;
