@@ -1,28 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>HTC Tool - Gen 1</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTC Feedstock Comparison Tool</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <div class="container">
-    <h1>HTC Simulator (Gen 1)</h1>
+    <header>
+      <h1>HTC Feedstock Comparison Tool</h1>
+      <p>
+        Screening-level comparison of biomass feedstocks for hydrothermal carbonization (HTC),
+        with emphasis on usable energy and carbon retention.
+      </p>
+    </header>
 
-    <label>Moisture Content (%)</label>
-    <input type="number" id="moisture">
+    <section class="card">
+      <h2>Inputs</h2>
 
-    <label>Temperature (°C)</label>
-    <input type="number" id="temperature">
+      <label for="moistureContent">Moisture Content (%)</label>
+      <input type="number" id="moistureContent" min="0" max="90" step="1" value="20" />
 
-    <label>Time (min)</label>
-    <input type="number" id="time">
+      <label for="temperature">HTC Temperature (°C)</label>
+      <input type="number" id="temperature" min="180" max="280" step="1" value="220" />
 
-    <button id="runBtn">Run</button>
+      <label for="residenceTime">Residence Time (min)</label>
+      <input type="number" id="residenceTime" min="5" max="240" step="5" value="60" />
 
-    <h2>Results</h2>
-    <div id="output">Nothing yet...</div>
+      <label for="optimizationGoal">Optimization Goal</label>
+      <select id="optimizationGoal">
+        <option value="energy" selected>Max usable energy</option>
+        <option value="balanced">Balanced</option>
+        <option value="carbon">Max carbon retention</option>
+      </select>
+
+      <button id="runBtn">Compare Feedstocks</button>
+    </section>
+
+    <section class="card">
+      <h2>Results</h2>
+      <div id="results">
+        <p>Enter the HTC conditions and click “Compare Feedstocks.”</p>
+      </div>
+    </section>
   </div>
 
   <script src="app.js"></script>
