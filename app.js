@@ -3,70 +3,57 @@ console.log("JS is connected");
 document.getElementById("runBtn").addEventListener("click", runHTC);
 
 function runHTC() {
-  // Get inputs
-  const feedstock = document.getElementById("feedstock").value;
+
   const M = parseFloat(document.getElementById("moistureContent").value);
   const T = parseFloat(document.getElementById("temperature").value);
   const t = parseFloat(document.getElementById("residenceTime").value);
   const goal = document.getElementById("optimizationGoal").value;
 
-  // Input validation
   if (isNaN(M) || isNaN(T) || isNaN(t)) {
     document.getElementById("results").innerText = "Please enter all inputs.";
     return;
   }
 
-  // Feedstock base properties (simplified engineering estimates)
-  const feedstockData = {
-    wood: { carbon: 0.50, energy: 18 },
-    corn: { carbon: 0.45, energy: 16 },
-    algae: { carbon: 0.55, energy: 20 },
-    food: { carbon: 0.48, energy: 17 }
+  const feedstocks = {
+    Wood: { carbon: 0.50, energy: 18 },
+    "Corn Stover": { carbon: 0.45, energy: 16 },
+    Algae: { carbon: 0.55, energy: 20 },
+    "Food Waste": { carbon: 0.48, energy: 17 }
   };
 
-  const base = feedstockData[feedstock];
+  let output = `--- HTC Comparison Results ---\n\n`;
 
-  // --- HTC MODEL (Simplified) ---
+  for (let name in feedstocks) {
+    const base = feedstocks[name];
 
-  // Hydrochar yield (%)
-  let yield = 0.6 - 0.001 * (T - 180) - 0.0005 * t;
+    let yieldVal = 0.6 - 0.001 * (T - 180) - 0.0005 * t;
+    let carbonContent = base.carbon + 0.002 * (T - 180);
+    let energyDensity = base.energy + 0.01 * (T - 180);
 
-  // Carbon content increase
-  let carbonContent = base.carbon + 0.002 * (T - 180);
+    yieldVal *= (1 - M / 100);
 
-  // Energy density (MJ/kg)
-  let energyDensity = base.energy + 0.01 * (T - 180);
+    if (goal === "energy") {
+      energyDensity *= 1.1;
+    } else if (goal === "yield") {
+      yieldVal *= 1.1;
+    } else if (goal === "carbon") {
+      carbonContent *= 1.1;
+    }
 
-  // Adjust for moisture
-  yield *= (1 - M / 100);
+    output += `
+${name}
+-------------------------
+Yield: ${(yieldVal * 100).toFixed(2)} %
+Carbon: ${(carbonContent * 100).toFixed(2)} %
+Energy: ${energyDensity.toFixed(2)} MJ/kg
 
-  // Optimization adjustments
-  if (goal === "energy") {
-    energyDensity *= 1.1;
-  } else if (goal === "yield") {
-    yield *= 1.1;
-  } else if (goal === "carbon") {
-    carbonContent *= 1.1;
+`;
   }
 
-  // Format results
-  let output = `
---- HTC Simulation Results ---
-
-Feedstock: ${feedstock}
-
-Hydrochar Yield: ${(yield * 100).toFixed(2)} %
-Carbon Content: ${(carbonContent * 100).toFixed(2)} %
-Energy Density: ${energyDensity.toFixed(2)} MJ/kg
-
---- Process Conditions ---
+  output += `--- Conditions ---
 Temperature: ${T} °C
-Residence Time: ${t} min
-Moisture Content: ${M} %
-
---- Notes ---
-Higher temperature → higher carbonization
-Longer time → lower yield but better quality
+Time: ${t} min
+Moisture: ${M} %
 `;
 
   document.getElementById("results").innerText = output;
