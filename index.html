@@ -2,52 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>HTC System Tool</title>
+  <title>HTC Tool - Gen 1</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="container">
-    <header>
-      <h1>Hydrothermal Carbonization (HTC) Tool</h1>
-      <p>Estimate outputs based on process conditions</p>
-    </header>
+    <h1>HTC Simulator (Gen 1)</h1>
 
-    <div class="card">
-      <h2>Inputs</h2>
+    <label>Moisture Content (%)</label>
+    <input type="number" id="moisture">
 
-      <label for="feedstock">Feedstock Type</label>
-      <select id="feedstock">
-        <option value="wood">Wood</option>
-        <option value="corn">Corn Stover</option>
-        <option value="algae">Algae</option>
-        <option value="food">Food Waste</option>
-      </select>
+    <label>Temperature (°C)</label>
+    <input type="number" id="temperature">
 
-      <label for="moistureContent">Moisture Content (%)</label>
-      <input type="number" id="moistureContent" placeholder="e.g. 70">
+    <label>Time (min)</label>
+    <input type="number" id="time">
 
-      <label for="temperature">Temperature (°C)</label>
-      <input type="number" id="temperature" placeholder="e.g. 220">
+    <button id="runBtn">Run</button>
 
-      <label for="residenceTime">Residence Time (min)</label>
-      <input type="number" id="residenceTime" placeholder="e.g. 60">
-
-      <label for="optimizationGoal">Optimization Goal</label>
-      <select id="optimizationGoal">
-        <option value="energy">Max Energy Output</option>
-        <option value="yield">Max Hydrochar Yield</option>
-        <option value="carbon">Max Carbon Content</option>
-      </select>
-
-      <button onclick="runHTC()">Run Simulation</button>
-    </div>
-
-    <div class="card">
-      <h2>Results</h2>
-      <div id="results">No results yet...</div>
-    </div>
-
+    <h2>Results</h2>
+    <div id="output">Nothing yet...</div>
   </div>
 
   <script src="app.js"></script>
