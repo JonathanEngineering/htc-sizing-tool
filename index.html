@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTC Power System Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>HTC Power System Tool</h1>
+
+    <div class="container">
+        <h3>Inputs</h3>
+
+        <input type="number" id="power" placeholder="Required Power (MW)" value="50">
+
+        <select id="integrity">
+            <option value="high">High Integrity</option>
+            <option value="medium">Medium Integrity</option>
+            <option value="low">Low Integrity</option>
+        </select>
+
+        <button onclick="calculate()">Run</button>
+
+        <div class="results" id="results"></div>
+
+        <canvas id="chart"></canvas>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
